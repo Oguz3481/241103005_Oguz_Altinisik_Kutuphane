@@ -48,8 +48,6 @@
             this.txtsifre2 = new System.Windows.Forms.TextBox();
             this.btnSifreGuncelle = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
-            this.lblSistemSuresi = new System.Windows.Forms.Label();
             this.dataGridViewKullanicilar = new System.Windows.Forms.DataGridView();
             this.btnListele = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewKullanicilar)).BeginInit();
@@ -228,24 +226,6 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.btnVeritabaniYedekle_Click);
             // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(107, 442);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(92, 16);
-            this.label8.TabIndex = 28;
-            this.label8.Text = "Sistem Süresi:";
-            // 
-            // lblSistemSuresi
-            // 
-            this.lblSistemSuresi.AutoSize = true;
-            this.lblSistemSuresi.Location = new System.Drawing.Point(214, 442);
-            this.lblSistemSuresi.Name = "lblSistemSuresi";
-            this.lblSistemSuresi.Size = new System.Drawing.Size(14, 16);
-            this.lblSistemSuresi.TabIndex = 29;
-            this.lblSistemSuresi.Text = "0";
-            // 
             // dataGridViewKullanicilar
             // 
             this.dataGridViewKullanicilar.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -274,8 +254,6 @@
             this.ClientSize = new System.Drawing.Size(1453, 657);
             this.Controls.Add(this.btnListele);
             this.Controls.Add(this.dataGridViewKullanicilar);
-            this.Controls.Add(this.lblSistemSuresi);
-            this.Controls.Add(this.label8);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btnSifreGuncelle);
             this.Controls.Add(this.txtsifre2);
@@ -327,8 +305,6 @@
         private System.Windows.Forms.TextBox txtsifre2;
         private System.Windows.Forms.Button btnSifreGuncelle;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label lblSistemSuresi;
         private System.Windows.Forms.DataGridView dataGridViewKullanicilar;
         private System.Windows.Forms.Button btnListele;
     }

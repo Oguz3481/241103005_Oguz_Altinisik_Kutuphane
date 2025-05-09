@@ -62,17 +62,24 @@ namespace _241103005_Oguz_Altinisik_Nesne
         {
             if (dataGridViewKullanicilar.SelectedRows.Count > 0)
             {
-                string email = dataGridViewKullanicilar.SelectedRows[0].Cells["Email"].Value.ToString();
+                int kullaniciId = Convert.ToInt32(dataGridViewKullanicilar.SelectedRows[0].Cells["KullaniciID"].Value);
 
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    SqlCommand cmd = new SqlCommand("DELETE FROM Kullanicilar WHERE Email = @Email", conn);
-                    cmd.Parameters.AddWithValue("@Email", email);
-                    cmd.ExecuteNonQuery();
+
+                    // Önce bağlı ödünç kayıtlarını kaldır
+                    SqlCommand cmdOduncSil = new SqlCommand("DELETE FROM OduncIslemleri WHERE KullaniciID = @KullaniciID", conn);
+                    cmdOduncSil.Parameters.AddWithValue("@KullaniciID", kullaniciId);
+                    cmdOduncSil.ExecuteNonQuery();
+
+                    // Şimdi kullanıcıyı güvenle silebiliriz
+                    SqlCommand cmdSil = new SqlCommand("DELETE FROM Kullanicilar WHERE KullaniciID = @KullaniciID", conn);
+                    cmdSil.Parameters.AddWithValue("@KullaniciID", kullaniciId);
+                    cmdSil.ExecuteNonQuery();
                 }
 
-                MessageBox.Show("Kullanıcı başarıyla silindi!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Kullanıcı ve bağlı ödünç işlemleri başarıyla silindi!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Listele();
             }
         }
