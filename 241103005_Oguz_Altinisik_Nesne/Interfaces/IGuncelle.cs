@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace _241103005_Oguz_Altinisik_Nesne.Interfaces
 {
-    internal interface ISifreYonetimi
+    internal interface IGuncelle:IEkle
     {
-        void SifreGuncelle(string email, string yeniSifre);
+        void Guncelle(int id);
     }
 }

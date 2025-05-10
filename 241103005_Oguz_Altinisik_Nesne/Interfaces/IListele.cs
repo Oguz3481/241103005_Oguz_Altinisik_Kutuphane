@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace _241103005_Oguz_Altinisik_Nesne.Interfaces
 {
-    internal interface ISistemYonetimi
+    internal interface IListele
     {
-        void VeritabaniYedekle();
+        void Listele(DataGridView dgv);
     }
 }

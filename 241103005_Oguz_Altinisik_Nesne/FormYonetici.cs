@@ -147,5 +147,12 @@ namespace _241103005_Oguz_Altinisik_Nesne
         {
             Listele();
         }
+
+        private void btnAnaSayfa_Click(object sender, EventArgs e)
+        {
+            FormAnacs anasayfa = new FormAnacs();
+            anasayfa.Show();
+            this.Hide(); // FormPersonel'i kapatmak yerine gizliyoruz
+        }
     }
 }

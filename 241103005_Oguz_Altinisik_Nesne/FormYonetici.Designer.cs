@@ -50,6 +50,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridViewKullanicilar = new System.Windows.Forms.DataGridView();
             this.btnListele = new System.Windows.Forms.Button();
+            this.btnAnaSayfa = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewKullanicilar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -247,11 +248,22 @@
             this.btnListele.UseVisualStyleBackColor = true;
             this.btnListele.Click += new System.EventHandler(this.btnListele_Click);
             // 
+            // btnAnaSayfa
+            // 
+            this.btnAnaSayfa.Location = new System.Drawing.Point(1150, 398);
+            this.btnAnaSayfa.Name = "btnAnaSayfa";
+            this.btnAnaSayfa.Size = new System.Drawing.Size(180, 131);
+            this.btnAnaSayfa.TabIndex = 32;
+            this.btnAnaSayfa.Text = "ANA SAYFAYA DÖN";
+            this.btnAnaSayfa.UseVisualStyleBackColor = true;
+            this.btnAnaSayfa.Click += new System.EventHandler(this.btnAnaSayfa_Click);
+            // 
             // FormYonetici
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1453, 657);
+            this.Controls.Add(this.btnAnaSayfa);
             this.Controls.Add(this.btnListele);
             this.Controls.Add(this.dataGridViewKullanicilar);
             this.Controls.Add(this.button1);
@@ -307,5 +319,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dataGridViewKullanicilar;
         private System.Windows.Forms.Button btnListele;
+        private System.Windows.Forms.Button btnAnaSayfa;
     }
 }

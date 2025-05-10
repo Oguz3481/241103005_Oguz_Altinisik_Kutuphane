@@ -37,6 +37,34 @@ namespace _241103005_Oguz_Altinisik_Nesne
                     _sifre = value;
             }
         }
+        private string GirisKontrolDetayli(string email, string sifre)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                // 1. Önce Kullanicilar tablosunu kontrol et
+                SqlCommand cmd1 = new SqlCommand("SELECT Rol FROM Kullanicilar WHERE Email = @Email AND Sifre = @Sifre", conn);
+                cmd1.Parameters.AddWithValue("@Email", email);
+                cmd1.Parameters.AddWithValue("@Sifre", sifre);
+
+                var rol = cmd1.ExecuteScalar()?.ToString();
+                if (rol != null)
+                    return rol;
+
+                // 2. Eğer bulunamadıysa Personeller tablosunu kontrol et
+                SqlCommand cmd2 = new SqlCommand("SELECT 'Personel' FROM Personeller WHERE Email = @Email AND Sifre = @Sifre", conn);
+                cmd2.Parameters.AddWithValue("@Email", email);
+                cmd2.Parameters.AddWithValue("@Sifre", sifre);
+
+                var sonuc = cmd2.ExecuteScalar()?.ToString();
+                if (sonuc != null)
+                    return "Personel";
+
+                return null;
+            }
+        }
+
 
         // Method Overloading: Kullanıcı giriş kontrolünü farklı parametrelerle çalıştırabilen versiyonlar
         private bool GirisKontrol(string email, string sifre)
@@ -60,34 +88,28 @@ namespace _241103005_Oguz_Altinisik_Nesne
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // Property’ler üzerinden giriş bilgilerini set ediyoruz
             Email = txtEmail.Text;
             Sifre = txtSifre.Text;
 
-            if (GirisKontrol()) // Encapsulation ile private değişkenleri kullanıyoruz
+            string rol = GirisKontrolDetayli(Email, Sifre);
+
+            if (rol == "Yonetici")
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    conn.Open();
-                    SqlCommand cmd = new SqlCommand("SELECT Rol FROM Kullanicilar WHERE Email = @Email AND Sifre = @Sifre", conn);
-                    cmd.Parameters.AddWithValue("@Email", Email);
-                    cmd.Parameters.AddWithValue("@Sifre", Sifre);
-
-                    var rol = cmd.ExecuteScalar()?.ToString();
-
-                    if (rol == "Yonetici")
-                    {
-                        FormYonetici yoneticiPanel = new FormYonetici();
-                        yoneticiPanel.Show();
-                        this.Hide();
-                    }
-                    else
-                    {
-                        FormAnacs anaForm = new FormAnacs(Email);
-                        anaForm.Show();
-                        this.Hide();
-                    }
-                }
+                FormYonetici yoneticiPanel = new FormYonetici();
+                yoneticiPanel.Show();
+                this.Hide();
+            }
+            else if (rol == "Personel")
+            {
+                FormPersonel personelPanel = new FormPersonel();
+                personelPanel.Show();
+                this.Hide();
+            }
+            else if (rol == "Uye")
+            {
+                FormAnacs anaForm = new FormAnacs(Email);
+                anaForm.Show();
+                this.Hide();
             }
             else
             {
