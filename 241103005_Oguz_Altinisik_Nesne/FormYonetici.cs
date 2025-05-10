@@ -100,7 +100,7 @@ namespace _241103005_Oguz_Altinisik_Nesne
                     cmd.ExecuteNonQuery();
                 }
 
-                MessageBox.Show("Kullanıcı yetkisi başarıyla güncellendi!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Kullanıcı yetkisi başarıyla güncellendi", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Listele();
             }
         }
