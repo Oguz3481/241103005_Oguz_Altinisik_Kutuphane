@@ -24,7 +24,7 @@ namespace _241103005_Oguz_Altinisik_Nesne
         
         public virtual void Kaydet()
         {
-            MessageBox.Show("Kayıt işlemi temel olarak yapıldı.");
+            MessageBox.Show("Kayıt işlemi temel olarak yapıldıı.");
         }
     }
 }

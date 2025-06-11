@@ -208,6 +208,7 @@
     <Compile Include="FormYonetici.Designer.cs">
       <DependentUpon>FormYonetici.cs</DependentUpon>
     </Compile>
+    <Compile Include="GirisYapanKullanici.cs" />
     <Compile Include="Interfaces\IEkle.cs" />
     <Compile Include="Interfaces\IGuncelle.cs" />
     <Compile Include="Interfaces\IKullaniciYonetimi.cs" />
@@ -225,6 +226,8 @@
     <Compile Include="LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PersonelListelemeIslemi.cs" />
+    <Compile Include="PersonelSilmeIslemi.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

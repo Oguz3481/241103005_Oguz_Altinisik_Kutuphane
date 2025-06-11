@@ -16,7 +16,7 @@ namespace _241103005_Oguz_Altinisik_Nesne
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormYonetici());
+            Application.Run(new LoginForm());
 
         }
     }

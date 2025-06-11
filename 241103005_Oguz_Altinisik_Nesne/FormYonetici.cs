@@ -17,11 +17,35 @@ namespace _241103005_Oguz_Altinisik_Nesne
         private void FormYonetici_Load(object sender, EventArgs e)
         {
             Listele();
+            KitaplariListele();
+
             cmbRol.Items.Clear();
             cmbRol.Items.Add("Uye");
             cmbRol.Items.Add("Yonetici");
-            cmbRol.SelectedIndex = 0; // Varsayılan olarak 'Uye' seçili olsun
+            cmbRol.SelectedIndex = 0;
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                // Kategori
+                SqlDataAdapter daKat = new SqlDataAdapter("SELECT KategoriID, Ad FROM Kategoriler", conn);
+                DataTable dtKat = new DataTable();
+                daKat.Fill(dtKat);
+                cmbKategori.DataSource = dtKat;
+                cmbKategori.DisplayMember = "Ad";
+                cmbKategori.ValueMember = "KategoriID";
+
+                // Yayinevi
+                SqlDataAdapter daYay = new SqlDataAdapter("SELECT YayineviID, Ad FROM Yayinevleri", conn);
+                DataTable dtYay = new DataTable();
+                daYay.Fill(dtYay);
+                cmbYayinevi.DataSource = dtYay;
+                cmbYayinevi.DisplayMember = "Ad";
+                cmbYayinevi.ValueMember = "YayineviID";
+            }
         }
+
 
         private void Listele()
         {
@@ -105,32 +129,7 @@ namespace _241103005_Oguz_Altinisik_Nesne
             }
         }
 
-        private void btnSifreGuncelle_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(txtemail2.Text) || string.IsNullOrWhiteSpace(txtsifre2.Text))
-            {
-                MessageBox.Show("Lütfen e-posta ve yeni şifreyi girin!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("UPDATE Kullanicilar SET Sifre = @YeniSifre WHERE Email = @Email", conn);
-                cmd.Parameters.AddWithValue("@Email", txtemail2.Text);
-                cmd.Parameters.AddWithValue("@YeniSifre", txtsifre2.Text);
-                cmd.ExecuteNonQuery();
-            }
-
-            MessageBox.Show("Şifre başarıyla güncellendi!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            Listele();
-        }
-
-        private void btnVeritabaniYedekle_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Veritabanı yedeklendi!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
+       
         private void dataGridViewKullanicilar_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -154,5 +153,167 @@ namespace _241103005_Oguz_Altinisik_Nesne
             anasayfa.Show();
             this.Hide(); // FormPersonel'i kapatmak yerine gizliyoruz
         }
+        private void KitaplariListele()
+        {
+            button1_Click(null, null);
+        }
+
+        private void btnEkle_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtKitapAd.Text) || string.IsNullOrWhiteSpace(txtISBN.Text) ||
+        string.IsNullOrWhiteSpace(txtSayfaSayisi.Text) || string.IsNullOrWhiteSpace(txtBasimYili.Text) ||
+        cmbKategori.SelectedItem == null || cmbYayinevi.SelectedItem == null)
+            {
+                MessageBox.Show("Lütfen tüm alanları doldurun!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(@"INSERT INTO Kitaplar 
+    (Ad, ISBN, SayfaSayisi, BasimYili, KategoriID, YayineviID, StokAdedi)
+    VALUES (@Ad, @ISBN, @SayfaSayisi, @BasimYili, @KategoriID, @YayineviID, @StokAdedi)", conn);
+
+                cmd.Parameters.AddWithValue("@Ad", txtKitapAd.Text);
+                cmd.Parameters.AddWithValue("@ISBN", txtISBN.Text);
+                cmd.Parameters.AddWithValue("@SayfaSayisi", int.Parse(txtSayfaSayisi.Text));
+                cmd.Parameters.AddWithValue("@BasimYili", int.Parse(txtBasimYili.Text));
+                cmd.Parameters.AddWithValue("@KategoriID", cmbKategori.SelectedValue);
+                cmd.Parameters.AddWithValue("@YayineviID", cmbYayinevi.SelectedValue);
+                cmd.Parameters.AddWithValue("@StokAdedi", int.Parse(txtStokAdedi.Text));
+
+                cmd.ExecuteNonQuery();
+            }
+
+            MessageBox.Show("Kitap başarıyla eklendi!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            button1_Click(null, null); // Listeyi güncelle
+        }
+
+        private void btnSil_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewKitaplar.SelectedRows.Count > 0)
+            {
+                int kitapId = Convert.ToInt32(dataGridViewKitaplar.SelectedRows[0].Cells["KitapID"].Value);
+                int stokAdedi = Convert.ToInt32(dataGridViewKitaplar.SelectedRows[0].Cells["StokAdedi"].Value);
+
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    if (stokAdedi > 0)
+                    {
+                        // Stok 1 azaltılır
+                        SqlCommand updateCmd = new SqlCommand("UPDATE Kitaplar SET StokAdedi = StokAdedi - 1 WHERE KitapID = @KitapID", conn);
+                        updateCmd.Parameters.AddWithValue("@KitapID", kitapId);
+                        updateCmd.ExecuteNonQuery();
+
+                        // Güncel stok değerini tekrar al
+                        SqlCommand checkCmd = new SqlCommand("SELECT StokAdedi FROM Kitaplar WHERE KitapID = @KitapID", conn);
+                        checkCmd.Parameters.AddWithValue("@KitapID", kitapId);
+                        int yeniStok = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                        if (yeniStok == 0)
+                        {
+                            // Stok 0 olduysa kitabı sil
+                            SqlCommand deleteCmd = new SqlCommand("DELETE FROM Kitaplar WHERE KitapID = @KitapID", conn);
+                            deleteCmd.Parameters.AddWithValue("@KitapID", kitapId);
+                            deleteCmd.ExecuteNonQuery();
+
+                            MessageBox.Show("Stok 0'a düştü. Kitap tamamen silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Kitabın stok adedi 1 azaltıldı.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    else
+                    {
+                        // Zaten stok 0 ise, doğrudan sil
+                        SqlCommand deleteCmd = new SqlCommand("DELETE FROM Kitaplar WHERE KitapID = @KitapID", conn);
+                        deleteCmd.Parameters.AddWithValue("@KitapID", kitapId);
+                        deleteCmd.ExecuteNonQuery();
+
+                        MessageBox.Show("Stok zaten 0'dı. Kitap tamamen silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+
+                button1_Click(null, null); // Listeyi yenile
+            }
+        }
+
+
+
+
+
+        private void btnGuncelle_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewKitaplar.SelectedRows.Count > 0)
+            {
+                int kitapId = Convert.ToInt32(dataGridViewKitaplar.SelectedRows[0].Cells["KitapID"].Value);
+
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand(@"UPDATE Kitaplar 
+    SET Ad = @Ad, ISBN = @ISBN, SayfaSayisi = @SayfaSayisi,
+        BasimYili = @BasimYili, KategoriID = @KategoriID, YayineviID = @YayineviID,
+        StokAdedi = @StokAdedi
+    WHERE KitapID = @KitapID", conn);
+
+
+                    cmd.Parameters.AddWithValue("@Ad", txtKitapAd.Text);
+                    cmd.Parameters.AddWithValue("@ISBN", txtISBN.Text);
+                    cmd.Parameters.AddWithValue("@SayfaSayisi", int.Parse(txtSayfaSayisi.Text));
+                    cmd.Parameters.AddWithValue("@BasimYili", int.Parse(txtBasimYili.Text));
+                    cmd.Parameters.AddWithValue("@KategoriID", cmbKategori.SelectedValue);
+                    cmd.Parameters.AddWithValue("@YayineviID", cmbYayinevi.SelectedValue);
+                    cmd.Parameters.AddWithValue("@KitapID", kitapId);
+                    cmd.Parameters.AddWithValue("@StokAdedi", int.Parse(txtStokAdedi.Text));
+
+                    cmd.ExecuteNonQuery();
+                }
+
+                MessageBox.Show("Kitap bilgileri güncellendi!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                button1_Click(null, null);
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = @"SELECT k.KitapID, k.Ad, k.ISBN, k.SayfaSayisi, k.BasimYili, 
+       kat.Ad AS Kategori, yv.Ad AS Yayinevi, k.StokAdedi
+FROM Kitaplar k
+INNER JOIN Kategoriler kat ON k.KategoriID = kat.KategoriID
+INNER JOIN Yayinevleri yv ON k.YayineviID = yv.YayineviID
+";
+
+                SqlDataAdapter da = new SqlDataAdapter(query, conn);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                dataGridViewKitaplar.DataSource = dt;
+            }
+        }
+
+        private void dataGridViewKitaplar_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow satir = dataGridViewKitaplar.Rows[e.RowIndex];
+                txtKitapAd.Text = satir.Cells["Ad"].Value.ToString();
+                txtISBN.Text = satir.Cells["ISBN"].Value.ToString();
+                txtSayfaSayisi.Text = satir.Cells["SayfaSayisi"].Value.ToString();
+                txtBasimYili.Text = satir.Cells["BasimYili"].Value.ToString();
+                cmbKategori.SelectedIndex = cmbKategori.FindString(satir.Cells["Kategori"].Value.ToString());
+                cmbYayinevi.SelectedIndex = cmbYayinevi.FindString(satir.Cells["Yayinevi"].Value.ToString());
+
+                txtStokAdedi.Text = satir.Cells["StokAdedi"].Value.ToString();
+
+            }
+        }
+
     }
 }

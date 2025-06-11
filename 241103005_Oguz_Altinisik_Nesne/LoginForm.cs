@@ -37,30 +37,83 @@ namespace _241103005_Oguz_Altinisik_Nesne
                     _sifre = value;
             }
         }
+        public abstract class GirisliKullanici
+        {
+            protected string Email;
+            public GirisliKullanici(string email)
+            {
+                Email = email;
+            }
+
+            public abstract void GirisYap(Form loginForm); // loginForm'u gizlemek için parametreyle yolluyoruz
+        }
+
+        public class Yonetici : GirisliKullanici
+        {
+            public Yonetici(string email) : base(email) { }
+
+            public override void GirisYap(Form loginForm)
+            {
+                FormYonetici form = new FormYonetici();
+                form.Show();
+                loginForm.Hide();
+            }
+        }
+
+        public class Personel : GirisliKullanici
+        {
+            public Personel(string email) : base(email) { }
+
+            public override void GirisYap(Form loginForm)
+            {
+                FormPersonel form = new FormPersonel();
+                form.Show();
+                loginForm.Hide();
+            }
+        }
+
+        public class Uye : GirisliKullanici
+        {
+            public Uye(string email) : base(email) { }
+
+            public override void GirisYap(Form loginForm)
+            {
+                FormAnacs form = new FormAnacs(Email);
+                form.Show();
+                loginForm.Hide();
+            }
+        }
         private string GirisKontrolDetayli(string email, string sifre)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
 
-                // 1. Önce Kullanicilar tablosunu kontrol et
-                SqlCommand cmd1 = new SqlCommand("SELECT Rol FROM Kullanicilar WHERE Email = @Email AND Sifre = @Sifre", conn);
+                // 1. Kullanicilar tablosunu kontrol et
+                SqlCommand cmd1 = new SqlCommand("SELECT KullaniciID, Rol, Email FROM Kullanicilar WHERE Email = @Email AND Sifre = @Sifre", conn);
                 cmd1.Parameters.AddWithValue("@Email", email);
                 cmd1.Parameters.AddWithValue("@Sifre", sifre);
 
-                var rol = cmd1.ExecuteScalar()?.ToString();
-                if (rol != null)
-                    return rol;
+                SqlDataReader reader = cmd1.ExecuteReader();
+                if (reader.Read())
+                {
+                    GirisYapanKullanici.KullaniciID = Convert.ToInt32(reader["KullaniciID"]);
+                    GirisYapanKullanici.Email = reader["Email"].ToString();
+                    return reader["Rol"].ToString();
+                }
+                reader.Close();
 
-                // 2. Eğer bulunamadıysa Personeller tablosunu kontrol et
-                SqlCommand cmd2 = new SqlCommand("SELECT 'Personel' FROM Personeller WHERE Email = @Email AND Sifre = @Sifre", conn);
+                // 2. Personel kontrolü
+                SqlCommand cmd2 = new SqlCommand("SELECT PersonelID, Email FROM Personeller WHERE Email = @Email AND Sifre = @Sifre", conn);
                 cmd2.Parameters.AddWithValue("@Email", email);
                 cmd2.Parameters.AddWithValue("@Sifre", sifre);
 
-                var sonuc = cmd2.ExecuteScalar()?.ToString();
-                if (sonuc != null)
+                SqlDataReader reader2 = cmd2.ExecuteReader();
+                if (reader2.Read())
+                {
+                    // Gerekirse Personel bilgileri de saklanabilir
                     return "Personel";
-
+                }
                 return null;
             }
         }
@@ -93,29 +146,23 @@ namespace _241103005_Oguz_Altinisik_Nesne
 
             string rol = GirisKontrolDetayli(Email, Sifre);
 
+            GirisliKullanici kullanici = null;
+
             if (rol == "Yonetici")
-            {
-                FormYonetici yoneticiPanel = new FormYonetici();
-                yoneticiPanel.Show();
-                this.Hide();
-            }
+                kullanici = new Yonetici(Email);
             else if (rol == "Personel")
-            {
-                FormPersonel personelPanel = new FormPersonel();
-                personelPanel.Show();
-                this.Hide();
-            }
+                kullanici = new Personel(Email);
             else if (rol == "Uye")
-            {
-                FormAnacs anaForm = new FormAnacs(Email);
-                anaForm.Show();
-                this.Hide();
-            }
+                kullanici = new Uye(Email);
+
+            if (kullanici != null)
+                kullanici.GirisYap(this);
             else
-            {
                 MessageBox.Show("Email veya şifre hatalı!", "Hatalı Giriş", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
+
+
+
 
         private void kayitbutton_Click(object sender, EventArgs e)
         {

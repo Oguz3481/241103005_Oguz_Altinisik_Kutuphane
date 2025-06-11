@@ -37,7 +37,6 @@
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.btnSil = new System.Windows.Forms.Button();
             this.btnGuncelle = new System.Windows.Forms.Button();
-            this.btnEkle = new System.Windows.Forms.Button();
             this.txtSifre = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewKullanicilar)).BeginInit();
@@ -57,27 +56,33 @@
             // lblAd
             // 
             this.lblAd.AutoSize = true;
-            this.lblAd.Location = new System.Drawing.Point(190, 139);
+            this.lblAd.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.lblAd.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(62)))), ((int)(((byte)(80)))));
+            this.lblAd.Location = new System.Drawing.Point(198, 125);
             this.lblAd.Name = "lblAd";
-            this.lblAd.Size = new System.Drawing.Size(27, 16);
+            this.lblAd.Size = new System.Drawing.Size(41, 28);
             this.lblAd.TabIndex = 1;
             this.lblAd.Text = "Ad:";
             // 
             // lblSoyad
             // 
             this.lblSoyad.AutoSize = true;
-            this.lblSoyad.Location = new System.Drawing.Point(190, 180);
+            this.lblSoyad.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.lblSoyad.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(62)))), ((int)(((byte)(80)))));
+            this.lblSoyad.Location = new System.Drawing.Point(190, 168);
             this.lblSoyad.Name = "lblSoyad";
-            this.lblSoyad.Size = new System.Drawing.Size(50, 16);
+            this.lblSoyad.Size = new System.Drawing.Size(71, 28);
             this.lblSoyad.TabIndex = 2;
             this.lblSoyad.Text = "Soyad:";
             // 
             // lblMail
             // 
             this.lblMail.AutoSize = true;
-            this.lblMail.Location = new System.Drawing.Point(190, 229);
+            this.lblMail.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.lblMail.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(62)))), ((int)(((byte)(80)))));
+            this.lblMail.Location = new System.Drawing.Point(190, 217);
             this.lblMail.Name = "lblMail";
-            this.lblMail.Size = new System.Drawing.Size(44, 16);
+            this.lblMail.Size = new System.Drawing.Size(63, 28);
             this.lblMail.TabIndex = 3;
             this.lblMail.Text = "Email:";
             // 
@@ -104,33 +109,33 @@
             // 
             // btnSil
             // 
-            this.btnSil.Location = new System.Drawing.Point(947, 313);
+            this.btnSil.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(152)))), ((int)(((byte)(219)))));
+            this.btnSil.FlatAppearance.BorderSize = 0;
+            this.btnSil.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSil.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSil.ForeColor = System.Drawing.Color.White;
+            this.btnSil.Location = new System.Drawing.Point(906, 284);
             this.btnSil.Name = "btnSil";
             this.btnSil.Size = new System.Drawing.Size(148, 122);
             this.btnSil.TabIndex = 11;
             this.btnSil.Text = "SİL";
-            this.btnSil.UseVisualStyleBackColor = true;
+            this.btnSil.UseVisualStyleBackColor = false;
             this.btnSil.Click += new System.EventHandler(this.btnSil_Click);
             // 
             // btnGuncelle
             // 
-            this.btnGuncelle.Location = new System.Drawing.Point(766, 313);
+            this.btnGuncelle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(152)))), ((int)(((byte)(219)))));
+            this.btnGuncelle.FlatAppearance.BorderSize = 0;
+            this.btnGuncelle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGuncelle.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGuncelle.ForeColor = System.Drawing.Color.White;
+            this.btnGuncelle.Location = new System.Drawing.Point(742, 284);
             this.btnGuncelle.Name = "btnGuncelle";
             this.btnGuncelle.Size = new System.Drawing.Size(148, 122);
             this.btnGuncelle.TabIndex = 12;
             this.btnGuncelle.Text = "GÜNCELLE";
-            this.btnGuncelle.UseVisualStyleBackColor = true;
+            this.btnGuncelle.UseVisualStyleBackColor = false;
             this.btnGuncelle.Click += new System.EventHandler(this.btnGuncelle_Click);
-            // 
-            // btnEkle
-            // 
-            this.btnEkle.Location = new System.Drawing.Point(573, 313);
-            this.btnEkle.Name = "btnEkle";
-            this.btnEkle.Size = new System.Drawing.Size(148, 122);
-            this.btnEkle.TabIndex = 13;
-            this.btnEkle.Text = "EKLE";
-            this.btnEkle.UseVisualStyleBackColor = true;
-            this.btnEkle.Click += new System.EventHandler(this.btnEkle_Click);
             // 
             // txtSifre
             // 
@@ -142,9 +147,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(190, 271);
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(62)))), ((int)(((byte)(80)))));
+            this.label1.Location = new System.Drawing.Point(190, 259);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 16);
+            this.label1.Size = new System.Drawing.Size(55, 28);
             this.label1.TabIndex = 14;
             this.label1.Text = "Şifre:";
             // 
@@ -155,7 +162,6 @@
             this.ClientSize = new System.Drawing.Size(1313, 531);
             this.Controls.Add(this.txtSifre);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.btnEkle);
             this.Controls.Add(this.btnGuncelle);
             this.Controls.Add(this.btnSil);
             this.Controls.Add(this.txtEmail);
@@ -185,7 +191,6 @@
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.Button btnSil;
         private System.Windows.Forms.Button btnGuncelle;
-        private System.Windows.Forms.Button btnEkle;
         private System.Windows.Forms.TextBox txtSifre;
         private System.Windows.Forms.Label label1;
     }

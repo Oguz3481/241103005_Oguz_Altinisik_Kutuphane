@@ -143,5 +143,12 @@ namespace _241103005_Oguz_Altinisik_Nesne
                     dtpIadeTarihi.Value = Convert.ToDateTime(satir.Cells["IadeTarihi"].Value);
             }
         }
+
+        private void btnAna_Click(object sender, EventArgs e)
+        {
+            FormAnacs anasayfa = new FormAnacs();
+            anasayfa.Show();
+            this.Hide();
+        }
     }
 }

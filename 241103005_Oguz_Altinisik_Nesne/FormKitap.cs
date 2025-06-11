@@ -13,16 +13,18 @@ namespace _241103005_Oguz_Altinisik_Nesne
 {
     public partial class FormKitap : Form
     {
-        public FormKitap()
+        string Email = "";
+        public FormKitap(string email)
         {
             InitializeComponent();
+            Email = email;
             LoadCategories();
             LoadPublishers();
         }
 
         private void FormKitap_Load(object sender, EventArgs e)
         {
-
+            
         }
         string connectionString = "Data Source=DESKTOP-6BEGMBC\\SQLEXPRESS;Initial Catalog=Oguz2;Integrated Security=True;Encrypt=True;TrustServerCertificate=True";
 
@@ -228,6 +230,13 @@ namespace _241103005_Oguz_Altinisik_Nesne
                 comboBoxKategori.SelectedItem = satir.Cells["KategoriID"].Value.ToString();
                 comboBoxYayinevi.SelectedItem = satir.Cells["YayineviID"].Value.ToString();
             }
+        }
+
+        private void btnAnaSayfa_Click(object sender, EventArgs e)
+        {
+            FormAnacs anasayfa = new FormAnacs();
+            anasayfa.Show();
+            this.Hide();
         }
     }
 }

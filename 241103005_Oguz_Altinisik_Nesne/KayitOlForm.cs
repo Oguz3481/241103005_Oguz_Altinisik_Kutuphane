@@ -11,7 +11,7 @@ namespace _241103005_Oguz_Altinisik_Nesne
             InitializeComponent();
         }
 
-        // Method Overriding: `FormTemel`'deki `Kaydet()` metodunu ezdik!
+        // 6.KURAL Method Overriding:Kaydet metodunu ezdik!
         public override void Kaydet()
         {
             string connectionString = "Data Source=DESKTOP-6BEGMBC\\SQLEXPRESS;Initial Catalog=Oguz2;Integrated Security=True;Encrypt=True;TrustServerCertificate=True";

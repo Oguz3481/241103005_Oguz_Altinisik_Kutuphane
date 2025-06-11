@@ -9,29 +9,13 @@ namespace _241103005_Oguz_Altinisik_Nesne
     public partial class FormKullanici : Form, IKullaniciYonetimi
     {
         private string connectionString = "Data Source=DESKTOP-6BEGMBC\\SQLEXPRESS;Initial Catalog=Oguz2;Integrated Security=True;Encrypt=True;TrustServerCertificate=True";
-
-        public FormKullanici()
+        string Email = "";
+        public FormKullanici(string email)
         {
             InitializeComponent();
+            Email = email;
         }
 
-        public void KullaniciEkle(string ad, string soyad, string email, string sifre)
-        {
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("INSERT INTO Kullanicilar (Ad, Soyad, Email, Sifre) VALUES (@Ad, @Soyad, @Email, @Sifre)", conn);
-                cmd.Parameters.AddWithValue("@Ad", ad);
-                cmd.Parameters.AddWithValue("@Soyad", soyad);
-                cmd.Parameters.AddWithValue("@Email", email);
-                cmd.Parameters.AddWithValue("@Sifre", sifre);  // Telefon kaldırıldı
-
-                cmd.ExecuteNonQuery();
-            }
-
-            Listele();
-            MessageBox.Show("Kullanıcı başarıyla eklendi!");
-        }
 
         public void KullaniciSil(string email)
         {
@@ -44,7 +28,7 @@ namespace _241103005_Oguz_Altinisik_Nesne
                 cmd.ExecuteNonQuery();
             }
 
-            Listele();
+            Listele(Email);
             MessageBox.Show("Kullanıcı başarıyla silindi!");
         }
         public void KullaniciGuncelle(int kullaniciID, string ad, string soyad, string email, string sifre)
@@ -62,21 +46,23 @@ namespace _241103005_Oguz_Altinisik_Nesne
                 cmd.ExecuteNonQuery();
             }
 
-            Listele();
+            Listele(Email);
             MessageBox.Show("Kullanıcı başarıyla güncellendi!");
         }
 
         private void FormKullanici_Load(object sender, EventArgs e)
         {
-            Listele();
+            Listele(Email);
         }
 
-        private void Listele()
+        private void Listele(string email)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                SqlDataAdapter da = new SqlDataAdapter("SELECT KullaniciID, Ad, Soyad, Email FROM Kullanicilar", conn);
+                SqlDataAdapter da = new SqlDataAdapter("SELECT KullaniciID, Ad, Soyad, Email FROM Kullanicilar WHERE Email = @Email", conn);
+                da.SelectCommand.Parameters.AddWithValue("@Email", email);
+
                 DataTable dt = new DataTable();
                 da.Fill(dt);
                 dataGridViewKullanicilar.DataSource = dt;
@@ -84,10 +70,8 @@ namespace _241103005_Oguz_Altinisik_Nesne
         }
 
 
-        private void btnEkle_Click(object sender, EventArgs e)
-        {
-            KullaniciEkle(txtAd.Text, txtSoyad.Text, txtEmail.Text, txtSifre.Text); // Şifre TextBox eklenmeli
-        }
+
+        
 
         private void btnSil_Click(object sender, EventArgs e)
         {
@@ -110,7 +94,7 @@ namespace _241103005_Oguz_Altinisik_Nesne
                 txtSifre.Text = ""; // Şifre veritabanından güvenlik için çekilmiyor
             }
         }
-
+        
         private void btnGuncelle_Click(object sender, EventArgs e)
         {
             if (dataGridViewKullanicilar.SelectedRows.Count > 0)
@@ -123,7 +107,7 @@ namespace _241103005_Oguz_Altinisik_Nesne
             {
                 MessageBox.Show("Lütfen bir kullanıcı seçin!");
             }
-        }
 
     }
+}
 }
